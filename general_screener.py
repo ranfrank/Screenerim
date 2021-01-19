@@ -13,18 +13,27 @@ stocklist = si.tickers_nasdaq()
 index_name = '^GSPC'  # S&P 500
 
 exportList = pd.DataFrame(columns=['Stock', 'Strategy', 'Rating'])
+search_results = []
 
-for stock in stocklist[0:50]:
+for stock in stocklist[0:300]:
+    search_results.append(deadCat_search(stock))
+    search_results.append(false_breakout_search(stock))
 
-    deadCat_results = deadCat_search(stock)
-    if (deadCat_results[0]):
+for result in search_results:
+    if result[1]:
         exportList = exportList.append(
-            {'Stock': stock, 'Strategy': deadCat_results[1], 'Rating': deadCat_results[2]}, ignore_index=True)
+            {'Stock': result[0], 'Strategy': result[2], 'Rating': result[3]}, ignore_index=True)
+        print(result[0] + ' is match for ' + result[2])
 
-    engulfing_result = false_breakout_search(stock)
-    if (engulfing_result[0]):
-        exportList = exportList.append(
-            {'Stock': stock, 'Strategy': engulfing_result[1], 'Rating': engulfing_result[2]}, ignore_index=True)
+    # deadCat_results = deadCat_search(stock)
+    # if deadCat_results[0]:
+    #     exportList = exportList.append(
+    #         {'Stock': stock, 'Strategy': deadCat_results[1], 'Rating': deadCat_results[2]}, ignore_index=True)
+    #
+    # engulfing_result = false_breakout_search(stock)
+    # if engulfing_result[0]:
+    #     exportList = exportList.append(
+    #         {'Stock': stock, 'Strategy': engulfing_result[1], 'Rating': engulfing_result[2]}, ignore_index=True)
 
 print(exportList)
 
