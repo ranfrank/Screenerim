@@ -15,28 +15,21 @@ index_name = '^GSPC'  # S&P 500
 exportList = pd.DataFrame(columns=['Stock', 'Strategy', 'Rating'])
 search_results = []
 
+# Search for all strategies
 for stock in stocklist[0:300]:
     search_results.append(deadCat_search(stock))
     search_results.append(false_breakout_search(stock))
 
+# Create list with relevant stocks
 for result in search_results:
     if result[1]:
         exportList = exportList.append(
             {'Stock': result[0], 'Strategy': result[2], 'Rating': result[3]}, ignore_index=True)
         print(result[0] + ' is match for ' + result[2])
 
-    # deadCat_results = deadCat_search(stock)
-    # if deadCat_results[0]:
-    #     exportList = exportList.append(
-    #         {'Stock': stock, 'Strategy': deadCat_results[1], 'Rating': deadCat_results[2]}, ignore_index=True)
-    #
-    # engulfing_result = false_breakout_search(stock)
-    # if engulfing_result[0]:
-    #     exportList = exportList.append(
-    #         {'Stock': stock, 'Strategy': engulfing_result[1], 'Rating': engulfing_result[2]}, ignore_index=True)
-
 print(exportList)
 
+# Generate result file
 writer = ExcelWriter("ScreenOutput.xlsx")
 exportList.to_excel(writer, "Sheet1")
 writer.save()
